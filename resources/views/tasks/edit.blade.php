@@ -12,12 +12,19 @@
         @csrf
         @method('PUT')
 
-            <div class="form-control my-4">
-                <label for="content" class="label">
-                    <span class="label-text">タスク:</span>
-                </label>
-                <input type="text" name="content" value="{{ $task->content }}" class="input input-bordered w-full">
-            </div>
+        <div class="form-control my-4">
+            <label for="title" class="label">
+                <span class="label-text">タイトル:</span>
+            </label>
+            <input type="text" name="title" value="{{ $task->title }}" class="input input-bordered w-full">
+        </div>
+
+        <div class="form-control my-4">
+            <label for="content" class="label">
+                <span class="label-text">タスク:</span>
+            </label>
+            <input type="text" name="content" value="{{ $task->content }}" class="input input-bordered w-full">
+        </div>
 
         <button type="submit" class="btn btn-primary btn-outline">更新</button>
     </form>
