@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('tasks', function (Blueprint $table) {
             //
-            $table->string('title');
+            $table->string('status', 10);
         });
     }
 
@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('tasks', function (Blueprint $table) {
             //
-            $table->dropColumn('title');
+            $table->dropColumn('status');
         });
     }
 };
