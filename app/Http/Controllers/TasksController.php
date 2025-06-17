@@ -23,9 +23,7 @@ class TasksController extends Controller
             $tasks = $user->tasks()->orderby('id', 'asc')->paginate(10);
 
             // タスク一覧ビューでそれを表示
-            return view('tasks.index', [
-                'tasks' => $tasks,
-            ]);
+            return view('tasks.index', ['tasks' => $tasks]);
         }
         else{
             return view('dashboard');
@@ -72,13 +70,27 @@ class TasksController extends Controller
      */
     public function show(string $id)
     {
-        //idの値でタスクを検索して取得
-        $task = task::findOrFail($id);
+        //認証済みユーザーを確認
+        if(Auth::check()){
+            //idの値でタスクを検索して取得
+            $task = task::findOrFail($id);
 
-        // タスク詳細ビューでそれを表示
-        return view('tasks.show', [
-            'task' => $task,
-        ]);
+            //認証済みユーザーとタスクの所有者の一致確認
+            if(Auth::id() == $task->user_id){
+                // タスク詳細ビューでそれを表示
+                return view('tasks.show', [
+                    'task' => $task,
+                ]);
+            }
+            else{
+                // トップページへリダイレクトさせる
+                return redirect('/');
+            }
+        }
+        else{
+            // トップページへリダイレクトさせる
+            return redirect('/');
+        }
     }
 
     /**
@@ -86,13 +98,28 @@ class TasksController extends Controller
      */
     public function edit(string $id)
     {
-        //idの値でタスクを検索して取得
-        $task = Task::findOrFail($id);
+        //認証済みユーザーを確認
+        if(Auth::check()){
+            //idの値でタスクを検索して取得
+            $task = Task::findOrFail($id);
 
-        // タスク編集ビューでそれを表示
-        return view('tasks.edit', [
-            'task' => $task,
-        ]);
+            //認証済みユーザーとタスクの所有者の一致確認
+            if(Auth::id() == $task->user_id){
+            // タスク編集ビューでそれを表示
+            return view('tasks.edit', [
+                'task' => $task,
+            ]);
+            }
+            else{
+                // トップページへリダイレクトさせる
+                return redirect('/');
+            }
+        }
+        else{
+            // トップページへリダイレクトさせる
+            return redirect('/');
+        }
+        
     }
 
     /**
@@ -100,22 +127,36 @@ class TasksController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //バリデーション
-        $request->validate([
-            'status' => 'required|max:10',
-            'content' => 'required',
-        ]);
+        //認証済みユーザーを確認
+        if(Auth::check()){
+            //バリデーション
+            $request->validate([
+                'status' => 'required|max:10',
+                'content' => 'required',
+            ]);
 
-        //idの値でタスクを検索して取得
-        $task = Task::findOrFail($id);
+            //idの値でタスクを検索して取得
+            $task = Task::findOrFail($id);
 
-        // タスクを更新
-        $task->status = $request->status;
-        $task->content = $request->content;
-        $task->save();
+            //認証済みユーザーとタスクの所有者の一致確認
+            if(Auth::id() == $task->user_id){
+                // タスクを更新
+                $task->status = $request->status;
+                $task->content = $request->content;
+                $task->save();
 
-        // トップページへリダイレクトさせる
-        return redirect('/');
+                // トップページへリダイレクトさせる
+                return redirect('/');
+            }
+            else{
+                // トップページへリダイレクトさせる
+                return redirect('/');
+            }
+        }
+        else{
+            // トップページへリダイレクトさせる
+            return redirect('/');
+        }
     }
 
     /**
@@ -123,13 +164,27 @@ class TasksController extends Controller
      */
     public function destroy(string $id)
     {
-        //// idの値でタスクを検索して取得
-        $task = Task::findOrFail($id);
+        //認証済みユーザーを確認
+        if(Auth::check()){
+            //// idの値でタスクを検索して取得
+            $task = Task::findOrFail($id);
 
-        // タスクを削除
-        $task->delete();
+            //認証済みユーザーとタスクの所有者の一致確認
+            if(Auth::id() == $task->user_id){
+                // タスクを削除
+                $task->delete();
 
-        // トップページへリダイレクトさせる
-        return redirect('/');
+                // トップページへリダイレクトさせる
+                return redirect('/');
+            }
+            else{
+                // トップページへリダイレクトさせる
+                return redirect('/');
+            }
+        }
+        else{
+            // トップページへリダイレクトさせる
+            return redirect('/');
+        }
     }
 }
